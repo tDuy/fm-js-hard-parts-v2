@@ -122,7 +122,7 @@ function sayHowdy() {
     // ADD METHODS HERE
     start() {
       this.intervalId = setInterval(() => {
-        this.cb(this.second);
+        this.cb(this.second % 60);
         this.second++;
       }, 1000);
     }
@@ -148,15 +148,19 @@ function sayHowdy() {
     // ADD CODE HERE
     let timeoutId;
     let allowed = true;
+    const setTimer = () => {
+      timeoutId = setTimeout(() => { allowed = true; }, interval);	
+    }
+
     return () => {
       if (allowed) {
         allowed = false;
-          timeoutId = setTimeout(() => allowed = true, interval);	
+        setTimer();
         return callback();
       }
       if (timeoutId) {
         clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => allowed = true, interval);
+        setTimer();
       }
     }
   }
